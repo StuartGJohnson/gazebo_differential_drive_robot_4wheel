@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>gazebo_differential_drive_robot</name>
+  <name>gazebo_differential_drive_robot_4wheel</name>
   <version>0.0.0</version>
   <description>A ROS 2 package for simulating a simple differential drive robot. Includes robot description and Gazebo simulation integration.</description>
   <maintainer email="lucasrmazzetto@gmail.com">Lucas Mazzetto</maintainer>
@@ -11,7 +11,7 @@
 
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>ros_gz</exec_depend>
   <exec_depend>xacro</exec_depend>
   <exec_depend>ros_gz_bridge</exec_depend>
 
