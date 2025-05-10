@@ -15,11 +15,23 @@ def generate_launch_description():
     package_name = "gazebo_differential_drive_robot_4wheel"
 
     # Define a launch argument for the world file, defaulting to "empty.sdf"
+
+    # Get the world file
+    my_world_file = os.path.join(
+         get_package_share_directory(package_name),
+         'worlds',
+         'ugv_world.world'
+    )
+
+    print(my_world_file)
+
     world_arg = DeclareLaunchArgument(
         'world',
-        default_value='empty.sdf',
+        default_value=my_world_file,
         description='Specify the world file for Gazebo (e.g., empty.sdf)'
     )
+
+
 
     # Define launch arguments for initial pose
     x_arg = DeclareLaunchArgument(
@@ -122,6 +134,20 @@ def generate_launch_description():
         output='screen'
     )
 
+    start_gazebo_ros_image_bridge_cmd = Node(
+        package='ros_gz_image',
+        executable='image_bridge',
+        arguments=['d435_rgb_camera/image_raw'],
+        output='screen',
+    )
+
+    start_gazebo_ros_depth_image_bridge_cmd = Node(
+        package='ros_gz_image',
+        executable='image_bridge',
+        arguments=['d435_depth_camera/image_raw'],
+        output='screen',
+    )
+
     return LaunchDescription([
         world_arg,
         gazebo_launch,
@@ -134,4 +160,6 @@ def generate_launch_description():
         spawn_model_gazebo_node,
         robot_state_publisher_node,
         gz_bridge_node,
+        start_gazebo_ros_depth_image_bridge_cmd,
+        start_gazebo_ros_image_bridge_cmd
     ])

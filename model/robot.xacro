@@ -269,6 +269,8 @@
             <odom_publish_frequency>100</odom_publish_frequency>
             <topic>cmd_vel</topic>
             <odom_topic>odom</odom_topic>
+            <child_frame_id>body_link</child_frame_id>
+            <tf_topic>/tf</tf_topic>
         </plugin>
 
         <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
@@ -278,6 +280,150 @@
             <joint_name>right_wheel2_joint</joint_name>
             <joint_name>left_wheel2_joint</joint_name>       
         </plugin>
+    </gazebo>
+
+    <!-- Gazebo sensors -->
+
+    <gazebo reference="d435_link">
+      <sensor name="d435_depth" type="depth_camera">
+        <pose>0 0 0 0 -0 0</pose>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <update_rate>30</update_rate>
+        <topic>/d435_depth_camera/image_raw</topic>
+        <camera name="intel_realsense_r200">
+          <camera_info_topic>depth_camera/camera_info</camera_info_topic>
+          <horizontal_fov>1.02974</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                  That pixel's noise value is added to each of its color
+                  channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="d435_link">
+      <sensor name="d435_rgb_camera" type="camera">
+        <pose>0 0 0 0 -0 0</pose>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <update_rate>30</update_rate>
+        <topic>/d435_rgb_camera/image_raw</topic>
+        <camera name="intel_realsense_r200">
+          <horizontal_fov>1.02974</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                  That pixel's noise value is added to each of its color
+                  channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="lidar_link">
+      <sensor name='hls_lfcd_lds' type='gpu_lidar'>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <pose>0 0 0.012 0 -0 0</pose>
+        <update_rate>10</update_rate>
+        <topic>scan</topic>
+        <gz_frame_id>lidar_link</gz_frame_id>
+        <lidar>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <resolution>1.000000</resolution>
+              <min_angle>0.000000</min_angle>
+              <max_angle>6.280000</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.160000</min>
+            <max>3.5</max>
+            <resolution>0.015000</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </lidar>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="body_link">
+      <sensor name='ugv_imu' type='imu'>
+        <always_on>true</always_on>
+        <update_rate>20</update_rate>
+        <topic>imu</topic>
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type='gaussian'>
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type='gaussian'>
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type='gaussian'>
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type='gaussian'>
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type='gaussian'>
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type='gaussian'>
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
     </gazebo>
 
 </robot>
