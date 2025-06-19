@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+cd <?xml version="1.0"?>
 
 <robot name="differential_drive_robot_4wheel" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
@@ -72,17 +72,17 @@
             <surface>
                 <friction>
                   <ode>
-                    <mu>1.5</mu>
-                    <mu2>0.5</mu2>
+                    <mu>100</mu>
+                    <mu2>50.0</mu2>
                     <slip1>0.1</slip1>
-                    <slip2>0.3</slip2>
+                    <slip2>0.2</slip2>
                   </ode>
                 </friction>
                 <bounce />
                 <contact>
                   <ode>
-                    <kp>1000.0</kp>
-                    <kd>10.0</kd>
+                    <kp>10000.0</kp>
+                    <kd>100.0</kd>
                   </ode>
                 </contact>
             </surface>
@@ -153,7 +153,6 @@
 
     <!-- Control Parameters -->    
     <xacro:property name="max_linear_acceleration" value="10"/>
-    <xacro:property name="gazebo_diff_drive_fudge" value="1.62"/>
 
     <!-- Links -->
 
@@ -191,8 +190,8 @@
         <parent link="body_link"/>
         <child link="left_wheel_link"/>
         <axis xyz="0 1 0"/>
-        <limit effort="100" velocity="100.0"/>
-        <dynamics damping="1.0" friction="0.1"/>
+        <limit effort="1000" velocity="100.0"/>
+        <dynamics damping="0.1" friction="0.1"/>
     </joint>
 
     <!-- Right Wheel Joint -->
@@ -201,8 +200,8 @@
         <parent link="body_link"/>
         <child link="right_wheel_link"/>
         <axis xyz="0 1 0"/>
-        <limit effort="100" velocity="100.0"/>
-        <dynamics damping="1.0" friction="0.1"/>
+        <limit effort="1000" velocity="100.0"/>
+        <dynamics damping="0.1" friction="0.1"/>
     </joint>
 
     <!-- Left Wheel2 Joint -->
@@ -211,8 +210,8 @@
         <parent link="body_link"/>
         <child link="left_wheel2_link"/>
         <axis xyz="0 1 0"/>
-        <limit effort="100" velocity="100.0"/>
-        <dynamics damping="1.0" friction="0.1"/>
+        <limit effort="1000" velocity="100.0"/>
+        <dynamics damping="0.1" friction="0.1"/>
     </joint>
 
     <!-- Right Wheel2 Joint -->
@@ -221,8 +220,8 @@
         <parent link="body_link"/>
         <child link="right_wheel2_link"/>
         <axis xyz="0 1 0"/>
-        <limit effort="100" velocity="100.0"/>
-        <dynamics damping="1.0" friction="0.1"/>
+        <limit effort="1000" velocity="100.0"/>
+        <dynamics damping="0.1" friction="0.1"/>
     </joint>
 
     <!-- battery joint -->
@@ -306,7 +305,7 @@
             <left_joint>left_wheel_joint</left_joint>
             <right_joint>right_wheel2_joint</right_joint>
             <left_joint>left_wheel2_joint</left_joint>
-            <wheel_separation>${wheel_separation*gazebo_diff_drive_fudge}</wheel_separation>
+            <wheel_separation>${wheel_separation}</wheel_separation>
             <wheel_radius>${wheel_radius}</wheel_radius>
             <max_linear_acceleration>${max_linear_acceleration}</max_linear_acceleration>
             <odom_publish_frequency>100</odom_publish_frequency>
@@ -407,7 +406,7 @@
           </scan>
           <range>
             <min>0.160000</min>
-            <max>10.0</max>
+            <max>3.5</max>
             <resolution>0.015000</resolution>
           </range>
           <noise>
