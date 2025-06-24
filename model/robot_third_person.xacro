@@ -335,7 +335,7 @@
 
     <gazebo reference="d435_link">
       <sensor name="d435_depth" type="depth_camera">
-        <pose>0 0 0 0 -0 0</pose>
+        <pose>-0.4 -0.3 0.3 0 0.78 0.78</pose>
         <always_on>true</always_on>
         <visualize>true</visualize>
         <update_rate>30</update_rate>
@@ -366,7 +366,7 @@
 
     <gazebo reference="d435_link">
       <sensor name="d435_rgb_camera" type="camera">
-        <pose>0 0 0 0 -0 0</pose>
+        <pose>-0.4 -0.3 0.3 0 0.78 0.78</pose>
         <always_on>true</always_on>
         <visualize>true</visualize>
         <update_rate>30</update_rate>

@@ -41,6 +41,12 @@ def generate_launch_description():
         description='Specify the world file base for Gazebo (e.g., /path/farmhouse)'
     )
 
+    robot_arg = DeclareLaunchArgument(
+        'robot',
+        default_value='robot.xacro',
+        description='Specify the robot file base for Gazebo (in the model dir))'
+    )
+
     # Define launch arguments for initial pose
     # x_arg = DeclareLaunchArgument(
     #     'x', default_value='0.0', description='Initial X position')
@@ -84,22 +90,12 @@ def generate_launch_description():
     # pitch = 0.0
     # yaw = 0.0
 
-    # Set paths to Xacro model and configuration files
-    robot_model_path = os.path.join(
-        get_package_share_directory(package_name),
-        'model',
-        'robot.xacro'
-    )
-
     gz_bridge_params_path = os.path.join(
         get_package_share_directory(package_name),
         'config',
         'gz_bridge.yaml'
     )
 
-    # Process the Xacro file to generate the URDF representation of the robot
-    robot_description = xacro.process_file(robot_model_path).toxml()
-    #print(robot_description)
 
     # Prepare to include the Gazebo simulation launch file
     gazebo_pkg_launch = PythonLaunchDescriptionSource(
@@ -123,6 +119,7 @@ def generate_launch_description():
     def launch_spawn(context: LaunchContext, *args, **kwargs):
         world_name = LaunchConfiguration("world").perform(context)
         world_file_root = os.path.splitext(world_name)[0]
+        model_file = LaunchConfiguration("robot").perform(context)
         # retrieve robot_start_xy from world definition
         # strip extension from path
         cfg_world_path = world_file_root + '.yml'
@@ -139,6 +136,16 @@ def generate_launch_description():
         pitch = 0.0
         yaw = 0.0
 
+        # Set paths to Xacro model and configuration files
+        robot_model_path = os.path.join(
+            get_package_share_directory(package_name),
+            'model',
+            model_file
+        )
+        # Process the Xacro file to generate the URDF representation of the robot
+        robot_description = xacro.process_file(robot_model_path).toxml()
+        # print(robot_description)
+
         # Create a node to spawn the robot model in the Gazebo environment
         spawn_model_gazebo_node = Node(
             package='ros_gz_sim',
@@ -154,28 +161,32 @@ def generate_launch_description():
                 '-Y', str(yaw),
                 '-allow_renaming', 'false'
             ],
+            parameters=[{'use_sim_time': True}],
             output='screen',
         )
-        return [spawn_model_gazebo_node]
 
-    # Create a node to publish the robot's state based on its URDF description
-    robot_state_publisher_node = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        parameters=[
-            {'robot_description': robot_description, 'use_sim_time': True}
-        ],
-        output='screen'
-    )
+        # Create a node to publish the robot's state based on its URDF description
+        robot_state_publisher_node = Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            parameters=[
+                {'robot_description': robot_description, 'use_sim_time': True}
+            ],
+            output='screen'
+        )
+
+        return [spawn_model_gazebo_node, robot_state_publisher_node]
+
 
     # Create a node for the ROS-Gazebo bridge to handle message passing
     gz_bridge_node = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         arguments=[
-            '--ros-args', '-p',
+            '--ros-args','-p',
             f'config_file:={gz_bridge_params_path}'
         ],
+        parameters=[{'use_sim_time': True}],
         output='screen'
     )
     
@@ -183,6 +194,7 @@ def generate_launch_description():
         package = 'gazebo_differential_drive_robot_4wheel',
         executable = 'gt_bridge_node',
         arguments=['differential_drive_robot_4wheel'],
+        parameters=[{'use_sim_time': True}],
         output='screen',
     )
 
@@ -190,6 +202,7 @@ def generate_launch_description():
         package='ros_gz_image',
         executable='image_bridge',
         arguments=['d435_rgb_camera/image_raw'],
+        parameters=[{'use_sim_time': True}],
         output='screen',
     )
 
@@ -202,6 +215,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         world_arg,
+        robot_arg,
         gazebo_launch,
         # x_arg,
         # y_arg,
@@ -210,7 +224,7 @@ def generate_launch_description():
         # pitch_arg,
         # yaw_arg,
         OpaqueFunction(function=launch_spawn),
-        robot_state_publisher_node,
+        #robot_state_publisher_node,
         gz_bridge_node,
         gt_bridge_node,
         start_gazebo_ros_depth_image_bridge_cmd,

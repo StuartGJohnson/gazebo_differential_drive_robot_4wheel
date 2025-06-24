@@ -70,7 +70,7 @@ private:
   }
 
   bool deleteEntity(const std::string &name) {
-    auto client = this->create_client<ros_gz_interfaces::srv::DeleteEntity>("/remove");
+    auto client = this->create_client<ros_gz_interfaces::srv::DeleteEntity>("/world/default/remove");
     if (!client->wait_for_service(3s)) {
       RCLCPP_ERROR(this->get_logger(), "delete_entity service not available.");
       return false;
@@ -88,7 +88,7 @@ private:
   }
 
   bool spawnEntity(const std::string &name, const std::string &sdf_path, double x, double y) {
-    auto client = this->create_client<ros_gz_interfaces::srv::SpawnEntity>("/create");
+    auto client = this->create_client<ros_gz_interfaces::srv::SpawnEntity>("/world/default/create");
     if (!client->wait_for_service(3s)) {
       RCLCPP_ERROR(this->get_logger(), "spawn_entity service not available.");
       return false;

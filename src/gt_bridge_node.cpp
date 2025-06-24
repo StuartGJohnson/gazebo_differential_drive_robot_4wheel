@@ -5,6 +5,8 @@
 #include <gz/msgs/pose_v.pb.h>
 #include <builtin_interfaces/msg/time.hpp>
 
+//using namespace std::placeholders;
+
 class GroundTruthBridge : public rclcpp::Node
 {
 public:
@@ -14,22 +16,24 @@ public:
     // Publisher
     pub_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("gt_pose", 10);
 
+    //Subscriber
     success = gz_node_.Subscribe("/world/default/pose/info", &GroundTruthBridge::gzCallback, this);
 
     if (!success)
     {
-        RCLCPP_ERROR(this->get_logger(), "Failed to subscribe to /world/default/pose/info");
+      RCLCPP_ERROR(this->get_logger(), "Failed to subscribe to /world/default/pose/info");
     }
 
   }
 
 private:
+
   void gzCallback(const gz::msgs::Pose_V &msg)
   {
     builtin_interfaces::msg::Time ros_time;
     const auto &gz_stamp = msg.header().stamp();
     ros_time.sec = static_cast<int32_t>(gz_stamp.sec());
-    ros_time.nanosec = static_cast<uint32_t>(gz_stamp.nsec());     
+    ros_time.nanosec = static_cast<uint32_t>(gz_stamp.nsec());
 
     for (int i = 0; i < msg.pose_size(); ++i)
     {
@@ -56,7 +60,6 @@ private:
   gz::transport::Node gz_node_;
   rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub_;
 };
-
 
 int main(int argc, char *argv[])
 {

@@ -57,3 +57,9 @@
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
+# fix ignition problems
+# - ros_topic_name: "gt"
+#   gz_topic_name: "model/differential_drive_robot_4wheel/pose"
+#   gz_type_name:: "gz.msgs.Pose_V"
+#   ros_type_name: "tf2_msgs/msg/TFMessage"
+#   direction: GZ_TO_ROS
