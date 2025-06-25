@@ -1,5 +1,10 @@
 # 4-Wheel Differential Drive Robot Simulation (Gazebo)
 
+![selfie](rgb_image.jpg)
+
+See also:
+[differential_drive_test](https://github.com/StuartGJohnson/differential_drive_test)
+
 ## About
 
 This package provides a (custom) 4-wheel skid-steer robot for simulation in gazebo. 
@@ -84,11 +89,9 @@ Current sensors are lidar (2d), rgbd camera, and IMU. GPS support will be added.
 
 ## Transform Tree
 
-Launching the robot and running:
+The transforms broadcast during simulator operation are described in the test repo/ROS2 package:
 
-`ros2 run tf2_tools view_frames`
-
-generates:
+[differential_drive_test](https://github.com/StuartGJohnson/differential_drive_test)
 
 ## Open-loop robot behavior
 
