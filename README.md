@@ -99,4 +99,4 @@ Robot behavior is described in the Open-loop robot behavior section in the test 
 ## Gazebo Issues
 - Extracting ground truth poses from gazebo takes some extra work. See `src/gt_bridge_node.cpp`.
 - There is no python support for `gz` published topics (as opposed to ROS2 topics). This necessitated C++ for nodes like `src/gt_bridge_node.cpp`.
-- Gazebo garden does not support a clean simulation reset. For example, `src/reset_and_respawn_node.cpp` causes a crash of gazebo garden. See also: [gazebo reset issues](https://github.com/gazebosim/gz-sim/issues/1107)
+- Gazebo garden does not support a clean simulation reset. For example, steps in `src/reset_and_respawn_node.cpp` may reset the simulation sucessfully, but resetting (remove, create) the state of the robot fails. See also: [gazebo reset issues](https://github.com/gazebosim/gz-sim/issues/1107)
