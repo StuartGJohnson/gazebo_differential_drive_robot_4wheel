@@ -25,18 +25,15 @@ The robot XACRO file uses geometric primitives to define the robot. This should 
 
 This package was developed on Ubuntu 22.04/ROS2 Humble/Gazebo Garden.
 
-#### Install Required ROS 2 Packages
-
-Many ROS2 packages are required. Keep installing until it works.
+See also:
+- [requirements.txt](requirements.txt)
+- [ros2_pkg_list.txt](ros2_pkg_list.txt)
 
 ## Usage
-
-### Clone the Repository
 
 ### Build the Package
 
 Source the ROS 2 environment and build the package. In your ros2 ws directory:
-
 
 ```bash
 source /opt/ros/humble/setup.bash #(if necessary)
