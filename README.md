@@ -41,10 +41,10 @@ colcon source install/setup.bash
 
 ### Launch the Robot
 
-After building the package, and given a world file with accompanying launch metadata:
+After building the package, and given world and robot files with accompanying launch metadata:
 
 ```bash
-ros2 launch gazebo_differential_drive_robot_4wheel robot.launch.py world:=<world>.sdf
+ros2 launch gazebo_differential_drive_robot_4wheel robot.launch.py world:=<world>.sdf robot:=<robot>.xacro
 ```
 
 This script assumes an accompanying "\<world\>.yml" file such as:
