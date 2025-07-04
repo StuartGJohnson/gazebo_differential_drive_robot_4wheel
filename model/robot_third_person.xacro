@@ -158,7 +158,7 @@
     <!-- Links -->
 
     <!-- Body Link -->
-    <xacro:box_link name="body_link" length="${body_length}" width="${body_width}" height="${body_height}" density="${body_density}" color="0.0 0.0 0.0 1.0"/>
+    <xacro:box_link name="base_link" length="${body_length}" width="${body_width}" height="${body_height}" density="${body_density}" color="0.0 0.0 0.0 1.0"/>
     <xacro:box_link name="battery_link" length="${battery_length}" width="${battery_width}" height="${battery_height}" density="${battery_density}" color="0.25 0.25 0.25 1.0"/>
     <xacro:box_link name="orin_link" length="${orin_length}" width="${orin_width}" height="${orin_height}" density="${orin_density}" color="0.45 0.45 0.45 1.0"/>
     <xacro:box_link name="lidar_link" length="${lidar_length}" width="${lidar_width}" height="${lidar_height}" density="${lidar_density}" color="0.0 0.0 0.0 1.0"/>
@@ -181,14 +181,14 @@
 
     <joint name="base_footprint_joint" type="fixed">
         <parent link="base_footprint"/>
-        <child link="body_link"/>
+        <child link="base_link"/>
         <origin xyz="0 0 ${body_ground_clearance + body_height/2.0}" rpy="0 0 0"/>
     </joint>
 
     <!-- Left Wheel Joint -->
     <joint name="left_wheel_joint" type="continuous">
         <origin xyz="-${wheel_offset} ${wheel_separation/2} ${body_wheel_axle_offset}" rpy="0 0 0"/>
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="left_wheel_link"/>
         <axis xyz="0 1 0"/>
         <limit effort="100" velocity="100.0"/>
@@ -198,7 +198,7 @@
     <!-- Right Wheel Joint -->
     <joint name="right_wheel_joint" type="continuous">
         <origin xyz="-${wheel_offset} ${-wheel_separation/2} ${body_wheel_axle_offset}" rpy="0 0 0"/>
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="right_wheel_link"/>
         <axis xyz="0 1 0"/>
         <limit effort="100" velocity="100.0"/>
@@ -208,7 +208,7 @@
     <!-- Left Wheel2 Joint -->
     <joint name="left_wheel2_joint" type="continuous">
         <origin xyz="${wheel_offset} ${wheel_separation/2} ${body_wheel_axle_offset}" rpy="0 0 0"/>
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="left_wheel2_link"/>
         <axis xyz="0 1 0"/>
         <limit effort="100" velocity="100.0"/>
@@ -218,7 +218,7 @@
     <!-- Right Wheel2 Joint -->
     <joint name="right_wheel2_joint" type="continuous">
         <origin xyz="${wheel_offset} ${-wheel_separation/2} ${body_wheel_axle_offset}" rpy="0 0 0"/>
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="right_wheel2_link"/>
         <axis xyz="0 1 0"/>
         <limit effort="100" velocity="100.0"/>
@@ -228,7 +228,7 @@
     <!-- battery joint -->
     <joint name="battery_joint" type="fixed">
         <origin xyz=".007 0 ${body_battery_offset}" rpy="0 0 0"/>
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="battery_link"/>
     </joint>
 
@@ -262,7 +262,7 @@
 
     <!-- Gazebo Parameters -->
     <!--
-    <gazebo reference="body_link">
+    <gazebo reference="base_link">
         <mu1>1.0</mu1>
         <mu2>0.5</mu2>
         <slip1>0.1</slip1>
@@ -425,7 +425,7 @@
       </sensor>
     </gazebo>
 
-    <gazebo reference="body_link">
+    <gazebo reference="base_link">
       <sensor name='ugv_imu' type='imu'>
         <always_on>true</always_on>
         <update_rate>20</update_rate>
