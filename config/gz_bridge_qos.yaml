@@ -1,0 +1,7 @@
+ros_gz_bridge:
+  ros__parameters:
+    # These keys must be set at startup.
+    qos_overrides./scan.publisher.reliability: best_effort
+    qos_overrides./scan.publisher.history: keep_last
+    qos_overrides./scan.publisher.depth: 1
+    qos_overrides./scan.publisher.durability: volatile

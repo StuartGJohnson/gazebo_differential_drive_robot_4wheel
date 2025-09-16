@@ -177,6 +177,9 @@
           <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
         </inertial>
     </link>
+
+    <link name="camera_optical_link"/>
+
     <!-- Joints -->
 
     <joint name="base_footprint_joint" type="fixed">
@@ -251,6 +254,13 @@
 	    <origin xyz="${orin_d435_offset_x} 0 ${orin_d435_offset_z-.02}" rpy="0 ${35.0*3.1416/180.0} 0"/>
         <parent link="orin_link"/>
         <child link="camera_link"/>
+    </joint>
+
+    <!-- optical frame ${-3.1415927/2} 0 ${-3.1415927/2} -->
+    <joint name="camera_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <parent link="camera_link"/>
+        <child link="camera_optical_link"/>
     </joint>
 
     <!-- gps joint -->
@@ -335,14 +345,14 @@
     <!-- Gazebo sensors -->
 
     <gazebo reference="camera_link">
-      <sensor name="d435_depth" type="depth_camera">
-        <pose>0 0 0 0 -0 0</pose>
+      <sensor name="color_camera" type="rgbd_camera">
+        <pose>0.0 0.0 0 0 0 0</pose>
         <always_on>true</always_on>
         <visualize>true</visualize>
         <update_rate>30</update_rate>
-        <topic>/d435_depth_camera/image_raw</topic>
+        <topic>/camera</topic>
+        <gz_frame_id>camera_optical_link</gz_frame_id>
         <camera name="intel_realsense_r200">
-          <camera_info_topic>depth_camera/camera_info</camera_info_topic>
           <horizontal_fov>1.02974</horizontal_fov>
           <image>
             <width>640</width>
@@ -350,7 +360,7 @@
             <format>R8G8B8</format>
           </image>
           <clip>
-            <near>0.01</near>
+            <near>0.05</near>
             <far>200</far>
           </clip>
           <noise>
@@ -365,35 +375,35 @@
       </sensor>
     </gazebo>
 
+    <xacro:if value='false'>
     <gazebo reference="camera_link">
-      <sensor name="d435_rgb_camera" type="camera">
-        <pose>0 0 0 0 -0 0</pose>
+      <sensor name="depth_camera" type="depth_camera">
+        <pose>0 0 0 0 0 0</pose>
         <always_on>true</always_on>
         <visualize>true</visualize>
         <update_rate>30</update_rate>
-        <topic>/d435_rgb_camera/image_raw</topic>
+        <topic>/camera/depth/image_raw</topic>
+        <gz_frame_id>camera_optical_link</gz_frame_id>
         <camera name="intel_realsense_r200">
           <horizontal_fov>1.02974</horizontal_fov>
           <image>
-            <width>640</width>
-            <height>480</height>
+            <width>424</width>
+            <height>240</height>
             <format>R8G8B8</format>
           </image>
           <clip>
-            <near>0.01</near>
+            <near>0.05</near>
             <far>200</far>
           </clip>
           <noise>
             <type>gaussian</type>
-            <!-- Noise is sampled independently per pixel on each frame.
-                  That pixel's noise value is added to each of its color
-                  channels, which at that point lie in the range [0,1]. -->
             <mean>0.0</mean>
             <stddev>0.007</stddev>
           </noise>
         </camera>
       </sensor>
     </gazebo>
+    </xacro:if>
 
     <gazebo reference="lidar_link">
       <sensor name='hls_lfcd_lds' type='gpu_lidar'>
@@ -431,6 +441,7 @@
         <always_on>true</always_on>
         <update_rate>20</update_rate>
         <topic>imu</topic>
+        <gz_frame_id>base_link</gz_frame_id>
         <imu>
           <angular_velocity>
             <x>
