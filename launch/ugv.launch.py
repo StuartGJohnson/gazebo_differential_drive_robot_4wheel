@@ -128,14 +128,14 @@ def generate_launch_description():
         # retrieve robot_start_xy from world definition
         # strip extension from path
         cfg_world_path = world_file_root + '.yml'
-        print(cfg_world_path)
+        print("world file: ", cfg_world_path)
 
         with open(cfg_world_path, 'r') as file:
             data = yaml.safe_load(file)
         robot_start_xy = np.array(data['robot_start_xy'])
         x = float(robot_start_xy[0])
         y = float(robot_start_xy[1])
-        print(x,y)
+        print("xy robot location: ", x,y)
         z = 0.005
         roll = 0.0
         pitch = 0.0
@@ -147,6 +147,7 @@ def generate_launch_description():
             'model',
             model_file
         )
+        print("robot file: ", model_file)
         # Process the Xacro file to generate the URDF representation of the robot
         robot_description = xacro.process_file(robot_model_path).toxml()
         # print(robot_description)
