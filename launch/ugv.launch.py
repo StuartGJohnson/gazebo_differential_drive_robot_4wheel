@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import xacro
 from ament_index_python.packages import get_package_share_directory
 
@@ -128,6 +129,13 @@ def generate_launch_description():
         # retrieve robot_start_xy from world definition
         # strip extension from path
         cfg_world_path = world_file_root + '.yml'
+        check_path = Path(cfg_world_path)
+        if (not check_path.exists()):
+            cfg_world_path = world_file_root + '.yaml'
+            check_path = Path(cfg_world_path)
+            if (not check_path.exists()):
+                raise RuntimeError("world file error!")
+
         print("world file: ", cfg_world_path)
 
         with open(cfg_world_path, 'r') as file:
